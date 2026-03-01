@@ -12,7 +12,7 @@ async function bootstrap() {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
 
-  app.use('/.well-known', express.static(join(__dirname, '..', 'public')));
+  app.use(express.static(join(process.cwd(), 'src', 'public')));
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter, {
@@ -21,6 +21,6 @@ async function bootstrap() {
     P2025: HttpStatus.NOT_FOUND,
   }));
 
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
