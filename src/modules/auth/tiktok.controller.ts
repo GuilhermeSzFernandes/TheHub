@@ -14,12 +14,12 @@ export class TikTokAuthController {
     const state = Math.random().toString(36).substring(2);
 
     const authUrl =
-        `https://www.tiktok.com/v2/auth/authorize/` +
-        `?client_key=${clientKey}` +
-        `&response_type=code` +
-        `&scope=user.info.basic` +
-        `&redirect_uri=${redirectUri}` +
-        `&state=${state}`;
+            `https://www.tiktok.com/v2/auth/authorize/` +
+            `?client_key=${clientKey}` +
+            `&response_type=code` +
+            `&scope=user.info.basic` +
+            `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+            `&state=${state}`;
 
         return res.redirect(authUrl);
     }
@@ -33,14 +33,14 @@ export class TikTokAuthController {
   ) {
     try {
       const tokenResponse = await axios.post(
-  'https://open.tiktokapis.com/v2/oauth/token/',
-  qs.stringify({
-    client_key: process.env.TIKTOK_CLIENT_KEY,
-    client_secret: process.env.TIKTOK_CLIENT_SECRET,
-    code: code,
-    grant_type: 'authorization_code',
-    redirect_uri: process.env.TIKTOK_REDIRECT_URI,
-  }),
+        'https://open.tiktokapis.com/v2/oauth/token/',
+        qs.stringify({
+        client_key: process.env.TIKTOK_CLIENT_KEY,
+        client_secret: process.env.TIKTOK_CLIENT_SECRET,
+        code: code,
+        grant_type: 'authorization_code',
+        redirect_uri: process.env.TIKTOK_REDIRECT_URI,
+        }),
   {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
