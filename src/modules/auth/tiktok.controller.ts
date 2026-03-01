@@ -32,24 +32,26 @@ export class TikTokAuthController {
     @Res() res: Response,
   ) {
     try {
-      const response = await axios.post(
-        'https://open.tiktokapis.com/v2/oauth/token/',
-        qs.stringify({
-          client_key: process.env.TIKTOK_CLIENT_KEY,
-          client_secret: process.env.TIKTOK_CLIENT_SECRET,
-          code,
-          grant_type: 'authorization_code',
-          redirect_uri: process.env.TIKTOK_REDIRECT_URI,
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        },
-      );
+      const tokenResponse = await axios.post(
+  'https://open.tiktokapis.com/v2/oauth/token/',
+  qs.stringify({
+    client_key: process.env.TIKTOK_CLIENT_KEY,
+    client_secret: process.env.TIKTOK_CLIENT_SECRET,
+    code: code,
+    grant_type: 'authorization_code',
+    redirect_uri: process.env.TIKTOK_REDIRECT_URI,
+  }),
+  {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  },
+);
 
-    const accessToken = response.data?.data?.access_token;
-    console.log(JSON.stringify(response.data, null, 2));
+console.log(JSON.stringify(tokenResponse.data, null, 2));
+
+    const accessToken = tokenResponse.data?.data?.access_token;
+    console.log(JSON.stringify(tokenResponse.data, null, 2));
 
       // Aqui você pode salvar no banco se quiser
 
