@@ -17,6 +17,6 @@ async function bootstrap() {
     P2025: HttpStatus.NOT_FOUND,
   }));
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
