@@ -6,23 +6,23 @@ import qs from 'qs';
 @Controller('auth/tiktok')
 export class TikTokAuthController {
 
-  // 🔹 Inicia login
-  @Get()
-  login(@Res() res: Response) {
+    // 🔹 Inicia login
+    @Get()
+    login(@Res() res: Response) {
     const clientKey = process.env.TIKTOK_CLIENT_KEY;
-    const redirectUri = encodeURIComponent(process.env.TIKTOK_REDIRECT_URI);
+    const redirectUri = process.env.TIKTOK_REDIRECT_URI;
     const state = Math.random().toString(36).substring(2);
 
     const authUrl =
-      `https://www.tiktok.com/v2/auth/authorize/` +
-      `?client_key=${clientKey}` +
-      `&response_type=code` +
-      `&scope=user.info.basic` +
-      `&redirect_uri=${redirectUri}` +
-      `&state=${state}`;
+        `https://www.tiktok.com/v2/auth/authorize/` +
+        `?client_key=${clientKey}` +
+        `&response_type=code` +
+        `&scope=user.info.basic` +
+        `&redirect_uri=${redirectUri}` +
+        `&state=${state}`;
 
-    return res.redirect(authUrl);
-  }
+        return res.redirect(authUrl);
+    }
 
   // 🔹 Callback
   @Get('callback')
