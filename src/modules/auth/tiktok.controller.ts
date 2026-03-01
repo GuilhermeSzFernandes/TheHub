@@ -17,7 +17,7 @@ export class TikTokAuthController {
             `https://www.tiktok.com/v2/auth/authorize/` +
             `?client_key=${clientKey}` +
             `&response_type=code` +
-            `&scope=user.info.basic` +
+            `&scope=user.info.basic,video.upload,video.publish` +
             `&redirect_uri=${encodeURIComponent(redirectUri)}` +
             `&state=${state}`;
 
@@ -48,9 +48,9 @@ export class TikTokAuthController {
   },
 );
 
-console.log(JSON.stringify(tokenResponse.data, null, 2));
+    console.log(JSON.stringify(tokenResponse.data, null, 2));
 
-    const accessToken = tokenResponse.data?.data?.access_token;
+    const accessToken = tokenResponse.data.access_token;
     console.log(JSON.stringify(tokenResponse.data, null, 2));
 
       // Aqui você pode salvar no banco se quiser
