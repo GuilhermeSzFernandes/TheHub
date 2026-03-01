@@ -49,6 +49,7 @@ export class TikTokAuthController {
       );
 
     const accessToken = response.data?.data?.access_token;
+    console.log(JSON.stringify(response.data, null, 2));
 
       // Aqui você pode salvar no banco se quiser
 
