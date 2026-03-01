@@ -48,7 +48,7 @@ export class TikTokAuthController {
         },
       );
 
-      const accessToken = response.data.access_token;
+    const accessToken = response.data?.data?.access_token;
 
       // Aqui você pode salvar no banco se quiser
 
