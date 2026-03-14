@@ -7,6 +7,6 @@ export class TiktokAuthService {
     constructor(private prisma: PrismaService){}
 
     async saveToken(data: Prisma.SocialIntegrationCreateInput){
-        return await this.prisma.socialIntegration.create({data});
+        return this.prisma.socialIntegration.create({data});
     }
 }

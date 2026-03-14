@@ -54,14 +54,13 @@ export class TikTokAuthController {
         expiresAt: new Date(Date.now() + tokenResponse.data.expires_in * 1000),
         refreshToken: tokenResponse.data.refresh_token,
         platform: SocialPlatform.TIKTOK,
-        updatedAt: new Date(Date.now()),
         
         user: {
           connect: {id: "e26c54a9-3de8-43b9-bf6b-61e938f1daad"}
         }
       };
 
-      this.service.saveToken(data)
+      await this.service.saveToken(data)
 
       return res.send(`
         <html>
