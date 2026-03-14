@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service.js';
-import { AuthController } from './auth.controller.js';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { PrismaModule } from '../../prisma.module.js';
-import { TikTokAuthController } from './tiktok.controller.js';
+import { PrismaModule } from '../../database/prisma.module';
 
 @Module({
   imports: [PrismaModule, JwtModule.register({
@@ -11,6 +10,6 @@ import { TikTokAuthController } from './tiktok.controller.js';
     signOptions: {expiresIn: '1h'},
   })],
   providers: [AuthService],
-  controllers: [AuthController, TikTokAuthController]
+  controllers: [AuthController]
 })
 export class AuthModule {}

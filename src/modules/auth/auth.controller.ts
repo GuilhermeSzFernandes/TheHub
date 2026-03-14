@@ -1,6 +1,6 @@
 import { Body, Controller, HttpException, Post } from '@nestjs/common';
-import { authPayloadDto } from './dto/auth.dto.js';
-import { AuthService } from './auth.service.js';
+import { authPayloadDto } from './dto/auth.dto';
+import { AuthService } from './auth.service';
 import { Prisma } from '@prisma/client';
 
 @Controller('auth')

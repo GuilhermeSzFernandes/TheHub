@@ -7,25 +7,55 @@ datasource db {
 }
 
 enum Role {
-MEMBER
-OWNER
-ADMIN
+  MEMBER
+  OWNER
+  ADMIN
 }
 
+enum SocialPlatform {
+  TIKTOK
+  INSTAGRAM
+  X
+  FACEBOOK
+  PINTEREST
+}
+
+
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  name     String?
-  password String
-  role     Role @default(MEMBER)
-  posts    Post[]
+  id        String             @id @default(cuid())
+  email     String             @unique
+  name      String?
+  password  String
+  role      Role               @default(MEMBER)
+  posts     Post[]
+
+  integrations  SocialIntegration[]
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  authorId  String?
-  author    User?    @relation(fields: [authorId], references: [id])
+  id            String         @id @default(cuid())
+  title         String
+  content       String?
+  published     Boolean?       @default(false)
+  authorId      String?
+  author        User?          @relation(fields: [authorId], references: [id])
+}
+
+model SocialIntegration {
+  id            String         @id @default(cuid())
+  userId        String
+  platform      SocialPlatform
+  accountId     String
+  accessToken   String         @db.Text
+  refreshToken  String?        @db.Text
+  expiresAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([platform])
+  
+  @@unique([userId, platform, accountId])
 }

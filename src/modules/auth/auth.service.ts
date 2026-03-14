@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { authPayloadDto } from './dto/auth.dto.js';
-import { PrismaService } from '../../prisma.service.js';
+import { authPayloadDto } from './dto/auth.dto';
+import { PrismaService } from '../../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { User } from '@prisma/client';
 import { Prisma } from '@prisma/client';
-import { PrismaClientExceptionFilter } from 'nestjs-prisma';
-import { AppError } from '../appError.js';
+import { AppError } from '../../common/errors/appError';
 
 @Injectable()
 export class AuthService {

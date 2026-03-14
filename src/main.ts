@@ -1,16 +1,13 @@
 import 'dotenv/config'; 
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module.js';
+import { AppModule } from './core/app.module';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { HttpStatus } from '@nestjs/common';
 import * as express from 'express';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
 
   app.use(express.static(join(process.cwd(), 'src', 'public')));
 

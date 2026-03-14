@@ -2,11 +2,15 @@ import { Controller, Get, Query, Res } from '@nestjs/common';
 import type { Response } from 'express';
 import axios from 'axios';
 import qs from 'qs';
+import { TiktokAuthService } from './tiktok-auth.service';
+import { Prisma, SocialPlatform } from '@prisma/client';
 
 @Controller('auth/tiktok')
 export class TikTokAuthController {
 
-    // 🔹 Inicia login
+  constructor(private service: TiktokAuthService){}
+
+    // Inicia login
     @Get()
     login(@Res() res: Response) {
     const clientKey = process.env.TIKTOK_CLIENT_KEY;
@@ -24,48 +28,50 @@ export class TikTokAuthController {
         return res.redirect(authUrl);
     }
 
-  // 🔹 Callback
+  // Callback
   @Get('callback')
-  async callback(
-    @Query('code') code: string,
-    @Query('state') state: string,
-    @Res() res: Response,
-  ) {
+  async callback(@Query('code') code: string, @Query('state') state: string, @Res() res: Response, ) {
     try {
       const tokenResponse = await axios.post(
         'https://open.tiktokapis.com/v2/oauth/token/',
         qs.stringify({
-        client_key: process.env.TIKTOK_CLIENT_KEY,
-        client_secret: process.env.TIKTOK_CLIENT_SECRET,
-        code: code,
-        grant_type: 'authorization_code',
-        redirect_uri: process.env.TIKTOK_REDIRECT_URI,
+          client_key: process.env.TIKTOK_CLIENT_KEY,
+          client_secret: process.env.TIKTOK_CLIENT_SECRET,
+          code: code,
+          grant_type: 'authorization_code',
+          redirect_uri: process.env.TIKTOK_REDIRECT_URI,
         }),
-  {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  },
-);
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
 
-    console.log(JSON.stringify(tokenResponse.data, null, 2));
+      const data: Prisma.SocialIntegrationCreateInput = {
+        accessToken: tokenResponse.data.access_token,
+        accountId: tokenResponse.data.open_id,
+        expiresAt: new Date(Date.now() + tokenResponse.data.expires_in * 1000),
+        refreshToken: tokenResponse.data.refresh_token,
+        platform: SocialPlatform.TIKTOK,
+        updatedAt: new Date(Date.now()),
+        
+        user: {
+          connect: {id: "e26c54a9-3de8-43b9-bf6b-61e938f1daad"}
+        }
+      };
 
-    const accessToken = tokenResponse.data.access_token;
-    console.log(JSON.stringify(tokenResponse.data, null, 2));
-
-      // Aqui você pode salvar no banco se quiser
+      this.service.saveToken(data)
 
       return res.send(`
         <html>
           <body style="font-family: Arial; text-align:center; margin-top:50px;">
-            <h1>Login realizado com sucesso 🎉</h1>
-            <p>Access Token:</p>
-            <textarea rows="6" cols="60">${accessToken}</textarea>
+            <h1>Sucesso ao salvar token ✅</h1>
           </body>
         </html>
       `);
-
-    } catch (error) {
+    } 
+    catch (error) {
       console.error(error.response?.data || error.message);
 
       return res.send(`
