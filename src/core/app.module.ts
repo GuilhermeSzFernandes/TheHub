@@ -19,6 +19,5 @@ import { TikTokAuthController } from 'src/integrations/tiktok/auth/tiktok-auth.c
       P2002: HttpStatus.CONFLICT,
       P2025: HttpStatus.NOT_FOUND,
     }), PrismaService, UsersService, PostService],
-  controllers: [TikTokAuthController],
 })
 export class AppModule {}
